@@ -24,7 +24,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             gifBone?.start()
         }
 
-//        constructMenu()
+        constructMenu()
         // Insert code here to initialize your application
     }
 
@@ -53,13 +53,41 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
     
     func downloadGIF(url: String) {
+        let withoutExt = URL(string: url)!.deletingPathExtension()
+        let name = withoutExt.lastPathComponent
         if url.isGIF() && url.isURL() {
             let url  = URL(string: url)!
             let task = URLSession.shared.downloadTask(with: url) { location, response, error in
                 if error != nil {
-                    print(error)
+                    
                 } else {
-                    self.gifBone?.imageURL = location
+                    let fileManager = FileManager.default
+                    guard let folder = fileManager.urls(for: .applicationSupportDirectory,
+                                                        in: .userDomainMask).first else { return }
+                    let imageFolder = folder.appendingPathComponent("RunDog").appendingPathComponent("images")
+                    var isDirectory: ObjCBool = false
+                    let folderExists = fileManager.fileExists(atPath: imageFolder.path,
+                                                              isDirectory: &isDirectory)
+                    if !folderExists || !isDirectory.boolValue {
+                        do {
+                            // 4
+                            try fileManager.createDirectory(at: imageFolder,
+                                                            withIntermediateDirectories: true,
+                                                            attributes: nil)
+                        } catch {
+                            return
+                        }
+                    }
+                    guard let atPath = location else { return }
+                    guard let suggestedFilename = response?.suggestedFilename else { return }
+                    let toPath = imageFolder.appendingPathComponent(suggestedFilename)
+                    do {
+                        try FileManager.default.moveItem(atPath: atPath.path, toPath: toPath.path)
+                    } catch { error
+                        print(error)
+                        return
+                    }
+                    self.gifBone?.imageURL = toPath
                 }
             }
             task.resume()
