@@ -36,11 +36,17 @@ public class Downloader {
                 if !folderExists || !isDirectory.boolValue {
                     do {
                         try fileManager.createDirectory(at: imageFolder, withIntermediateDirectories: true, attributes: nil)
-                        try FileManager.default.moveItem(atPath: atPath.path, toPath: toPath.path)
                     } catch {
                         failed(error)
                         return
                     }
+                }
+                
+                do {
+                    try FileManager.default.moveItem(atPath: atPath.path, toPath: toPath.path)
+                } catch {
+                    failed(error)
+                    return
                 }
                 compleation(toPath)
             }
