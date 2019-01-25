@@ -6,17 +6,15 @@
 //  Copyright © 2019 垰 尚太朗. All rights reserved.
 //
 
+import Cocoa
+
 extension String {
     
-    public func isImage() -> Bool {
-        // Add here your image formats.
-        let imageFormats = ["jpg", "jpeg", "png", "gif"]
-        
-        if let ext = self.getExtension() {
-            return imageFormats.contains(ext)
-        }
-        
-        return false
+    public func isGIF() -> Bool {
+        print(self)
+        let ext = String(self.suffix(4))
+        print("EXT", ext)
+        return ext == ".gif" || ext == ".GIF"
     }
     
     public func getExtension() -> String? {
