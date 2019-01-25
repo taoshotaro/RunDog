@@ -37,61 +37,20 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         alert.messageText = "Insert GIF URL"
         alert.alertStyle = .critical
         urlTextField.delegate = self
+        urlTextField.stringValue = ""
         alert.accessoryView = urlTextField
         let gifs = ["blinking", "james", "rap", "think", "parrot"]
-        let gifBone = GifBone(alert: alert, imageName: gifs[Int.random(in: 0...4)])
-        gifBone.start()
+        let aleartGifBone = GifBone(alert: alert, imageName: gifs[Int.random(in: 0...4)])
+        aleartGifBone.start()
         alert.addButton(withTitle: "OK")
         alert.addButton(withTitle: "Cancel")
         let responseTag = alert.runModal()
         if responseTag.rawValue == 1000 {
-            downloadGIF(url: urlInput)
+            self.gifBone?.imageURL = urlInput
         } else if responseTag.rawValue == 1001 {
             print("Cancel")
         }
-        gifBone.stop()
-    }
-    
-    func downloadGIF(url: String) {
-        let withoutExt = URL(string: url)!.deletingPathExtension()
-        let name = withoutExt.lastPathComponent
-        if url.isGIF() && url.isURL() {
-            let url  = URL(string: url)!
-            let task = URLSession.shared.downloadTask(with: url) { location, response, error in
-                if error != nil {
-                    
-                } else {
-                    let fileManager = FileManager.default
-                    guard let folder = fileManager.urls(for: .applicationSupportDirectory,
-                                                        in: .userDomainMask).first else { return }
-                    let imageFolder = folder.appendingPathComponent("RunDog").appendingPathComponent("images")
-                    var isDirectory: ObjCBool = false
-                    let folderExists = fileManager.fileExists(atPath: imageFolder.path,
-                                                              isDirectory: &isDirectory)
-                    if !folderExists || !isDirectory.boolValue {
-                        do {
-                            // 4
-                            try fileManager.createDirectory(at: imageFolder,
-                                                            withIntermediateDirectories: true,
-                                                            attributes: nil)
-                        } catch {
-                            return
-                        }
-                    }
-                    guard let atPath = location else { return }
-                    guard let suggestedFilename = response?.suggestedFilename else { return }
-                    let toPath = imageFolder.appendingPathComponent(suggestedFilename)
-                    do {
-                        try FileManager.default.moveItem(atPath: atPath.path, toPath: toPath.path)
-                    } catch { error
-                        print(error)
-                        return
-                    }
-                    self.gifBone?.imageURL = toPath
-                }
-            }
-            task.resume()
-        }
+        aleartGifBone.stop()
     }
 
     func constructMenu() {
@@ -107,7 +66,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 }
 
 extension AppDelegate: NSTextFieldDelegate {
-    
     func controlTextDidEndEditing(_ obj: Notification) {
         urlInput = urlTextField.stringValue
     }
@@ -115,6 +73,5 @@ extension AppDelegate: NSTextFieldDelegate {
     func controlTextDidChange(_ obj: Notification) {
         urlInput = urlTextField.stringValue
     }
-    
 }
 
