@@ -10,11 +10,15 @@ import Cocoa
 
 class GifBone {
     
-    private var timer: Timer?
+    private var gifTimer: Timer?
+    private var cpuTimer: Timer?
     private var gif: GifInfo?
     private var frameAt: Int = 0
     private var statusButton: NSStatusBarButton?
     private var alert: NSAlert?
+    private var system: System
+    private var cpuPercentage: Double = 1.0
+
     var imageName: String {
         didSet {
             reloadImage()
@@ -29,13 +33,18 @@ class GifBone {
     init(statusButton: NSStatusBarButton, imageName: String) {
         self.statusButton = statusButton
         self.imageName = imageName
+        self.system = System()
+        reloadCPUUsage()
+        cpuTimer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(reloadCPUUsage), userInfo: nil, repeats: true)
         reloadImage()
     }
     
     init(alert: NSAlert, imageName: String) {
         self.alert = alert
         self.imageName = imageName
-        print(imageName)
+        self.system = System()
+        reloadCPUUsage()
+        cpuTimer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(reloadCPUUsage), userInfo: nil, repeats: true)
         reloadImage()
     }
     
@@ -58,13 +67,20 @@ class GifBone {
     
     func start() {
         if let gif = gif {
-            timer = Timer.scheduledTimer(timeInterval: gif.frameDuration, target: self, selector: #selector(update), userInfo: nil, repeats: true)
-            RunLoop.current.add(timer!, forMode: .common)
+            gifTimer?.invalidate()
+            gifTimer = Timer.scheduledTimer(timeInterval: gif.frameDuration * cpuPercentage, target: self, selector: #selector(update), userInfo: nil, repeats: true)
+            RunLoop.current.add(gifTimer!, forMode: .common)
         }
     }
-    
+
+    @objc func reloadCPUUsage() {
+        let (systemCPU, userCPU, _, _) = system.usageCPU()
+        cpuPercentage = pow(2, (userCPU + systemCPU - 50) / 50 * -1)
+        start()
+    }
+
     func stop() {
-        timer?.invalidate()
+        gifTimer?.invalidate()
     }
 
     @objc private func update() {
