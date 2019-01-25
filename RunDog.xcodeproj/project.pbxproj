@@ -23,6 +23,7 @@
 		69E29BC721F9A523001248AA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 69E29BC621F9A523001248AA /* Assets.xcassets */; };
 		69E29BCA21F9A523001248AA /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 69E29BC821F9A523001248AA /* Main.storyboard */; };
 		69E29BD321F9B064001248AA /* GifBone.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69E29BD221F9B064001248AA /* GifBone.swift */; };
+		69E29BFD21FAABFE001248AA /* System.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69E29BFC21FAABFE001248AA /* System.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -45,6 +46,7 @@
 		69E29BCB21F9A523001248AA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		69E29BCC21F9A523001248AA /* RunDog.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = RunDog.entitlements; sourceTree = "<group>"; };
 		69E29BD221F9B064001248AA /* GifBone.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GifBone.swift; sourceTree = "<group>"; };
+		69E29BFC21FAABFE001248AA /* System.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = System.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -93,6 +95,7 @@
 				69E29BD221F9B064001248AA /* GifBone.swift */,
 				69E29BC421F9A521001248AA /* ViewController.swift */,
 				5A0BE20221FA2F6B00C5AFCC /* String+Extension.swift */,
+				69E29BFC21FAABFE001248AA /* System.swift */,
 				5A0BE1E621FA182500C5AFCC /* Gif */,
 				69E29BC621F9A523001248AA /* Assets.xcassets */,
 				5A0BE1FC21FA241A00C5AFCC /* blinking.gif */,
@@ -189,6 +192,7 @@
 			files = (
 				5A0BE1F521FA182500C5AFCC /* Encoder.swift in Sources */,
 				5A0BE1F621FA182500C5AFCC /* Extensions.swift in Sources */,
+				69E29BFD21FAABFE001248AA /* System.swift in Sources */,
 				69E29BC521F9A521001248AA /* ViewController.swift in Sources */,
 				5A0BE1F321FA182500C5AFCC /* GifInfo.swift in Sources */,
 				5A0BE20321FA2F6B00C5AFCC /* String+Extension.swift in Sources */,

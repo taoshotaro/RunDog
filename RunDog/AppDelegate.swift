@@ -22,10 +22,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             button.imageScaling = .scaleProportionallyDown
             gifBone = GifBone(statusButton: button, imageName: "parrot")
             gifBone?.start()
-//            button.action = #selector(printQuote)
         }
 
-        constructMenu()
+//        constructMenu()
         // Insert code here to initialize your application
     }
 
@@ -50,6 +49,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         } else if responseTag.rawValue == 1001 {
             print("Cancel")
         }
+        gifBone.stop()
     }
     
     func downloadGIF(url: String) {
