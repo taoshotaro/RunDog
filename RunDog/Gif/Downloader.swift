@@ -1,13 +1,5 @@
-//
-//  GifDownloader.swift
-//  RunDog
-//
-//  Created by 垰尚太朗 on 2019/01/25.
-//  Copyright © 2019 垰 尚太朗. All rights reserved.
-//
-
-import Foundation
 import Cocoa
+import Foundation
 
 public class Downloader {
     

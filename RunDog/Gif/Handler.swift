@@ -1,24 +1,24 @@
-import ImageIO
 import Cocoa
 import CoreGraphics
+import ImageIO
 
 public class Handler {
-  public let encoder: Encoder
-  public let decoder: Decoder
+    public let encoder: Encoder
+    public let decoder: Decoder
 
-  public init(encoder: Encoder, decoder: Decoder) {
-    self.encoder = encoder
-    self.decoder = decoder
-  }
-
-  /// Modify each frame in the gif
-  public func modify(gifUrl: URL, closure: (NSImage) -> NSImage ) -> URL? {
-    guard let info = decoder.decode(gifUrl: gifUrl) else {
-      return nil
+    public init(encoder: Encoder, decoder: Decoder) {
+        self.encoder = encoder
+        self.decoder = decoder
     }
 
-    let images = info.images.map(closure)
+    /// Modify each frame in the gif
+    public func modify(gifUrl: URL, closure: (NSImage) -> NSImage ) -> URL? {
+        guard let info = decoder.decode(gifUrl: gifUrl) else {
+            return nil
+        }
 
-    return encoder.encode(images: images, frameDuration: info.frameDuration)
-  }
+        let images = info.images.map(closure)
+
+        return encoder.encode(images: images, frameDuration: info.frameDuration)
+    }
 }

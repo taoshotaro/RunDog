@@ -1,11 +1,3 @@
-//
-//  GifBone.swift
-//  RunDog
-//
-//  Created by 垰 尚太朗 on 2019/01/24.
-//  Copyright © 2019 垰 尚太朗. All rights reserved.
-//
-
 import Cocoa
 
 class GifBone {

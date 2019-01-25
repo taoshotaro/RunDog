@@ -24,25 +24,25 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 import Darwin
-import IOKit.pwr_mgt
 import Foundation
+import IOKit.pwr_mgt
 
 //------------------------------------------------------------------------------
 // MARK: PRIVATE PROPERTIES
 //------------------------------------------------------------------------------
 
 // As defined in <mach/tash_info.h>
-private let HOST_BASIC_INFO_COUNT         : mach_msg_type_number_t =
+private let HOST_BASIC_INFO_COUNT: mach_msg_type_number_t =
     UInt32(MemoryLayout<host_basic_info_data_t>.size / MemoryLayout<integer_t>.size)
-private let HOST_LOAD_INFO_COUNT          : mach_msg_type_number_t =
+private let HOST_LOAD_INFO_COUNT: mach_msg_type_number_t =
     UInt32(MemoryLayout<host_load_info_data_t>.size / MemoryLayout<integer_t>.size)
-private let HOST_CPU_LOAD_INFO_COUNT      : mach_msg_type_number_t =
+private let HOST_CPU_LOAD_INFO_COUNT: mach_msg_type_number_t =
     UInt32(MemoryLayout<host_cpu_load_info_data_t>.size / MemoryLayout<integer_t>.size)
-private let HOST_VM_INFO64_COUNT          : mach_msg_type_number_t =
+private let HOST_VM_INFO64_COUNT: mach_msg_type_number_t =
     UInt32(MemoryLayout<vm_statistics64_data_t>.size / MemoryLayout<integer_t>.size)
-private let HOST_SCHED_INFO_COUNT         : mach_msg_type_number_t =
+private let HOST_SCHED_INFO_COUNT: mach_msg_type_number_t =
     UInt32(MemoryLayout<host_sched_info_data_t>.size / MemoryLayout<integer_t>.size)
-private let PROCESSOR_SET_LOAD_INFO_COUNT : mach_msg_type_number_t =
+private let PROCESSOR_SET_LOAD_INFO_COUNT: mach_msg_type_number_t =
     UInt32(MemoryLayout<processor_set_load_info_data_t>.size / MemoryLayout<natural_t>.size)
 
 
@@ -75,12 +75,12 @@ public struct System {
 
      TODO: Pages?
      */
-    public enum Unit : Double {
+    public enum Unit: Double {
         // For going from byte to -
         case byte     = 1
-        case kilobyte = 1024
-        case megabyte = 1048576
-        case gigabyte = 1073741824
+        case kilobyte = 1_024
+        case megabyte = 1_048_576
+        case gigabyte = 1_073_741_824
     }
 
 
@@ -136,29 +136,29 @@ public struct System {
      Get CPU usage (system, user, idle, nice). Determined by the delta between
      the current and last call. Thus, first call will always be inaccurate.
      */
-    public mutating func usageCPU() -> (system : Double,
-        user   : Double,
-        idle   : Double,
-        nice   : Double) {
-            let load = System.hostCPULoadInfo()
+    public mutating func usageCPU() -> (system: Double,
+                                        user: Double,
+                                        idle: Double,
+                                        nice: Double) {
+        let load = System.hostCPULoadInfo()
 
-            let userDiff = Double(load.cpu_ticks.0 - loadPrevious.cpu_ticks.0)
-            let sysDiff  = Double(load.cpu_ticks.1 - loadPrevious.cpu_ticks.1)
-            let idleDiff = Double(load.cpu_ticks.2 - loadPrevious.cpu_ticks.2)
-            let niceDiff = Double(load.cpu_ticks.3 - loadPrevious.cpu_ticks.3)
+        let userDiff = Double(load.cpu_ticks.0 - loadPrevious.cpu_ticks.0)
+        let sysDiff  = Double(load.cpu_ticks.1 - loadPrevious.cpu_ticks.1)
+        let idleDiff = Double(load.cpu_ticks.2 - loadPrevious.cpu_ticks.2)
+        let niceDiff = Double(load.cpu_ticks.3 - loadPrevious.cpu_ticks.3)
 
-            let totalTicks = sysDiff + userDiff + niceDiff + idleDiff
+        let totalTicks = sysDiff + userDiff + niceDiff + idleDiff
 
-            let sys  = sysDiff  / totalTicks * 100.0
-            let user = userDiff / totalTicks * 100.0
-            let idle = idleDiff / totalTicks * 100.0
-            let nice = niceDiff / totalTicks * 100.0
+        let sys  = sysDiff / totalTicks * 100.0
+        let user = userDiff / totalTicks * 100.0
+        let idle = idleDiff / totalTicks * 100.0
+        let nice = niceDiff / totalTicks * 100.0
 
-            loadPrevious = load
+        loadPrevious = load
 
-            // TODO: 2 decimal places
-            // TODO: Check that total is 100%
-            return (sys, user, idle, nice)
+        // TODO: 2 decimal places
+        // TODO: Check that total is 100%
+        return (sys, user, idle, nice)
     }
 
 
@@ -180,8 +180,7 @@ public struct System {
         let result = sysctl(&mib, u_int(mib.count), ptr, &size, nil, 0)
 
 
-        if result == 0 { name = String(cString: UnsafeRawPointer(ptr).assumingMemoryBound(to: CChar.self)) }
-        else           { name = String() }
+        if result == 0 { name = String(cString: UnsafeRawPointer(ptr).assumingMemoryBound(to: CChar.self)) } else { name = String() }
 
 
         ptr.deallocate()
@@ -327,27 +326,27 @@ public struct System {
     /**
      System memory usage (free, active, inactive, wired, compressed).
      */
-    public static func memoryUsage() -> (free       : Double,
-        active     : Double,
-        inactive   : Double,
-        wired      : Double,
-        compressed : Double) {
-            let stats = System.VMStatistics64()
+    public static func memoryUsage() -> (free: Double,
+                                         active: Double,
+                                         inactive: Double,
+                                         wired: Double,
+                                         compressed: Double) {
+        let stats = System.VMStatistics64()
 
-            let free     = Double(stats.free_count) * Double(PAGE_SIZE)
-                / Unit.gigabyte.rawValue
-            let active   = Double(stats.active_count) * Double(PAGE_SIZE)
-                / Unit.gigabyte.rawValue
-            let inactive = Double(stats.inactive_count) * Double(PAGE_SIZE)
-                / Unit.gigabyte.rawValue
-            let wired    = Double(stats.wire_count) * Double(PAGE_SIZE)
-                / Unit.gigabyte.rawValue
+        let free     = Double(stats.free_count) * Double(PAGE_SIZE)
+            / Unit.gigabyte.rawValue
+        let active   = Double(stats.active_count) * Double(PAGE_SIZE)
+            / Unit.gigabyte.rawValue
+        let inactive = Double(stats.inactive_count) * Double(PAGE_SIZE)
+            / Unit.gigabyte.rawValue
+        let wired    = Double(stats.wire_count) * Double(PAGE_SIZE)
+            / Unit.gigabyte.rawValue
 
-            // Result of the compression. This is what you see in Activity Monitor
-            let compressed = Double(stats.compressor_page_count) * Double(PAGE_SIZE)
-                / Unit.gigabyte.rawValue
+        // Result of the compression. This is what you see in Activity Monitor
+        let compressed = Double(stats.compressor_page_count) * Double(PAGE_SIZE)
+            / Unit.gigabyte.rawValue
 
-            return (free, active, inactive, wired, compressed)
+        return (free, active, inactive, wired, compressed)
     }
 
 
@@ -382,11 +381,11 @@ public struct System {
 
         var uptime = currentTime - bootTime.tv_sec
 
-        let days = uptime / 86400   // Number of seconds in a day
-        uptime %= 86400
+        let days = uptime / 86_400   // Number of seconds in a day
+        uptime %= 86_400
 
-        let hrs = uptime / 3600     // Number of seconds in a hour
-        uptime %= 3600
+        let hrs = uptime / 3_600     // Number of seconds in a hour
+        uptime %= 3_600
 
         let mins = uptime / 60
         let secs = uptime % 60
@@ -415,43 +414,43 @@ public struct System {
      a percentage less than 100%.
      */
     public static func CPUPowerLimit() -> (processorSpeed: Double,
-        processorCount: Int,
-        schedulerTime : Double) {
-            var processorSpeed = -1.0
-            var processorCount = -1
-            var schedulerTime  = -1.0
+                                           processorCount: Int,
+                                           schedulerTime: Double) {
+        var processorSpeed = -1.0
+        var processorCount = -1
+        var schedulerTime  = -1.0
 
-            let status = UnsafeMutablePointer<Unmanaged<CFDictionary>?>.allocate(capacity: 1)
+        let status = UnsafeMutablePointer<Unmanaged<CFDictionary>?>.allocate(capacity: 1)
 
-            let result = IOPMCopyCPUPowerStatus(status)
+        let result = IOPMCopyCPUPowerStatus(status)
 
-            #if DEBUG
-            // TODO: kIOReturnNotFound case as seen in pmset
-            if result != kIOReturnSuccess {
-                print("ERROR - \(#file):\(#function) - kern_result_t = "
-                    + "\(result)")
-            }
-            #endif
+        #if DEBUG
+        // TODO: kIOReturnNotFound case as seen in pmset
+        if result != kIOReturnSuccess {
+            print("ERROR - \(#file):\(#function) - kern_result_t = "
+                + "\(result)")
+        }
+        #endif
 
 
-            if result == kIOReturnSuccess,
-                let data = status.move()?.takeUnretainedValue() {
-                let dataMap = data as NSDictionary
+        if result == kIOReturnSuccess,
+            let data = status.move()?.takeUnretainedValue() {
+            let dataMap = data as NSDictionary
 
-                // TODO: Force unwrapping here should be safe, as
-                //       IOPMCopyCPUPowerStatus() defines the keys, but the
-                //       the cast (from AnyObject) could be problematic
-                processorSpeed = dataMap[kIOPMCPUPowerLimitProcessorSpeedKey]!
-                    as! Double
-                processorCount = dataMap[kIOPMCPUPowerLimitProcessorCountKey]!
-                    as! Int
-                schedulerTime  = dataMap[kIOPMCPUPowerLimitSchedulerTimeKey]!
-                    as! Double
-            }
+            // TODO: Force unwrapping here should be safe, as
+            //       IOPMCopyCPUPowerStatus() defines the keys, but the
+            //       the cast (from AnyObject) could be problematic
+            processorSpeed = dataMap[kIOPMCPUPowerLimitProcessorSpeedKey]!
+                as! Double
+            processorCount = dataMap[kIOPMCPUPowerLimitProcessorCountKey]!
+                as! Int
+            schedulerTime  = dataMap[kIOPMCPUPowerLimitSchedulerTimeKey]!
+                as! Double
+        }
 
-            status.deallocate()
+        status.deallocate()
 
-            return (processorSpeed, processorCount, schedulerTime)
+        return (processorSpeed, processorCount, schedulerTime)
     }
 
 

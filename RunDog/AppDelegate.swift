@@ -1,17 +1,9 @@
-//
-//  AppDelegate.swift
-//  RunDog
-//
-//  Created by 垰 尚太朗 on 2019/01/24.
-//  Copyright © 2019 垰 尚太朗. All rights reserved.
-//
-
 import Cocoa
 
 @NSApplicationMain
 class AppDelegate: NSObject, NSApplicationDelegate {
 
-    let statusItem = NSStatusBar.system.statusItem(withLength:NSStatusItem.squareLength)
+    let statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.squareLength)
     var gifBone: GifBone?
 
     func applicationDidFinishLaunching(_ aNotification: Notification) {
@@ -38,15 +30,15 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 //        urlTextField.stringValue = ""
         alert.accessoryView = NSTextField(frame: NSRect(x: 0, y: 0, width: 200, height: 24))
         let gifs = ["blinking", "james", "rap", "think", "parrot"]
-        let aleartGifBone = GifBone(alert: alert, imageName: gifs[Int.random(in: 0...4)])
+        let aleartGifBone = GifBone(alert: alert, imageName: gifs[Int.random(in: 0 ... 4)])
         aleartGifBone.start()
         alert.addButton(withTitle: "OK")
         alert.addButton(withTitle: "Cancel")
         let responseTag = alert.runModal()
-        if responseTag.rawValue == 1000 {
+        if responseTag.rawValue == 1_000 {
             guard let textField = alert.accessoryView as? NSTextField else { return }
             self.gifBone?.imageURL = textField.stringValue
-        } else if responseTag.rawValue == 1001 {
+        } else if responseTag.rawValue == 1_001 {
             print("Cancel")
         }
         aleartGifBone.stop()
