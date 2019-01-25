@@ -112,5 +112,9 @@ extension AppDelegate: NSTextFieldDelegate {
         urlInput = urlTextField.stringValue
     }
     
+    func controlTextDidChange(_ obj: Notification) {
+        urlInput = urlTextField.stringValue
+    }
+    
 }
 
