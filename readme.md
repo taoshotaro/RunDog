@@ -8,6 +8,7 @@ If you prefer the original one, please install [RunCat](https://itunes.apple.com
 Use this application with your own risk.
 
 # Downloads
+[OSX](https://github.com/taoshotaro/RunDog/releases/download/1.0/RunDog.dmg)
 
 # To-Do
 
