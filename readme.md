@@ -32,3 +32,5 @@ List
 - [ ] Auto Width (now its square)
 
 Tested on MacBook Pro (15-inch, 2016) macOS Mojave
+
+<a href="https://www.buymeacoffee.com/shotr" target="_blank"><img src="https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png" alt="Buy Me A Coffee" style="height: auto !important;width: auto !important;" ></a>
