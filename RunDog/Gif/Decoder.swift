@@ -10,13 +10,13 @@ public class Decoder {
 
 public extension Decoder {
     /// Decode gif file to multile images
-    public func decode(gifUrl: URL) -> GifInfo? {
+    func decode(gifUrl: URL) -> GifInfo? {
         guard let source = CGImageSourceCreateWithURL(gifUrl.toCF(), nil) else {
             return nil
         }
 
         let frameCount = CGImageSourceGetCount(source)
-        let images: [NSImage] = Array(0 ..< frameCount).flatMap({
+        let images: [NSImage] = Array(0 ..< frameCount).compactMap({
             guard let cgImage = CGImageSourceCreateImageAtIndex(source, $0, nil) else {
                 return nil
             }
@@ -63,7 +63,7 @@ public extension Decoder {
 
 public extension Decoder {
     /// Decode video file to multile images
-    public func decode(videoUrl: URL) -> VideoInfo? {
+    func decode(videoUrl: URL) -> VideoInfo? {
         return nil
     }
 }
