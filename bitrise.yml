@@ -9,7 +9,7 @@ workflows:
         - content: |-
             echo "Hello World"
     after_run:
-    - test2
+    - seccond
   seccond:
     steps:
     - script:
