@@ -15,4 +15,4 @@ workflows:
     - script:
         inputs:
         - content: |-
-            echo "Hello World 2 new"
+            echo "Hello World 2 new new"
