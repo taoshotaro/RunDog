@@ -10,9 +10,9 @@ workflows:
             echo "Hello World"
     after_run:
     - test2
-  test2:
+  seccond:
     steps:
     - script:
         inputs:
         - content: |-
-            echo "Hello World"
+            echo "Hello World 2"
