@@ -1,0 +1,18 @@
+---
+format_version: 4
+default_step_lib_source: https://github.com/bitrise-io/bitrise-steplib.git
+workflows:
+  test-wf:
+    steps:
+    - script:
+        inputs:
+        - content: |-
+            echo "Hello World"
+    after_run:
+    - test2
+  test2:
+    steps:
+    - script:
+        inputs:
+        - content: |-
+            echo "Hello World"
